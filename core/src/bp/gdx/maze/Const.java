@@ -10,15 +10,15 @@ public class Const {
 	/**
 	 * Screen size in tiles. Screen is a square, nxn
 	 */
-	public static final int SCREEN_SIZE = 20; // measured in tiles, n x n
+	public static final int SCREEN_SIZE = 21; // measured in tiles, n x n
 	/**
 	 * World height in tiles, should be odd (2*n + 1)
 	 */
-	public static final int WORLD_HEIGHT = 11;
+	public static final int WORLD_HEIGHT = 21;
 	/**
 	 * World width in tiles, should be odd (2*n + 1)
 	 */
-	public static final int WORLD_WIDTH = 11;
+	public static final int WORLD_WIDTH = 21;
 	/**
 	 * Wordl width in unit
 	 */

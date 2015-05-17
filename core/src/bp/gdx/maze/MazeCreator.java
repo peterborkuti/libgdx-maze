@@ -1,12 +1,13 @@
 package bp.gdx.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 public class MazeCreator {
 
-	private Maze maze = new Maze();
+	private Maze maze = new Maze("brick_wall_single_perfect.png");
 
 	class Place {
 		int row;
@@ -27,6 +28,10 @@ public class MazeCreator {
 	public MazeCreator() {
 		createMaze();
 		log();
+	}
+
+	public TiledMapRenderer getMazeRenderer() {
+		return maze.getRenderer();
 	}
 
 	/*
