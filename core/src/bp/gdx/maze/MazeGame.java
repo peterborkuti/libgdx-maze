@@ -14,6 +14,7 @@ public class MazeGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		MazeCreator maze = new MazeCreator();
 	}
 
 	@Override
