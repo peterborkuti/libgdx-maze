@@ -5,6 +5,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
 public class MazeCreator {
+
+	private Maze maze = new Maze();
+
 	class Place {
 		int row;
 		int col;
@@ -21,27 +24,9 @@ public class MazeCreator {
 		}
 	}
 
-	enum PLACE {wall, empty, visited};
-
-	PLACE maze[][] = new PLACE[Const.WORLD_HEIGHT][Const.WORLD_WIDTH];
-
 	public MazeCreator() {
 		createMaze();
-		Gdx.app.log("MazeCreator", "\n" + this.toString());
-	}
-
-	public String toString() {
-		char carr[] = new char[(Const.WORLD_WIDTH + 1) * Const.WORLD_HEIGHT];
-
-		for (int r = 0; r < Const.WORLD_HEIGHT; r++) {
-			for (int c = 0; c < Const.WORLD_WIDTH; c++) {
-				char ch = (maze[r][c] == PLACE.wall) ? '*' : ' ';
-				carr[ r * (Const.WORLD_WIDTH + 1) + c] = ch;
-			}
-			carr[ (r + 1) * (Const.WORLD_WIDTH + 1) - 1 ] = '\n';
-		}
-
-		return new String(carr);
+		log();
 	}
 
 	/*
@@ -60,7 +45,7 @@ public class MazeCreator {
 	private void fillWithWalls() {
 		for (int r = 0; r < Const.WORLD_HEIGHT; r++) {
 			for (int c = 0; c < Const.WORLD_WIDTH; c++) {
-				maze[r][c] = PLACE.wall;
+				maze.setPlace(r, c, Maze.PLACE.wall);
 			}
 		}
 	}
@@ -81,7 +66,7 @@ public class MazeCreator {
 	private void createDefaultRooms() {
 		for (int r = 1; r < Const.WORLD_HEIGHT; r += 2) {
 			for (int c = 1; c < Const.WORLD_WIDTH; c += 2) {
-				maze[r][c] = PLACE.empty;
+				maze.setPlace(r, c, Maze.PLACE.empty);
 			}
 		}
 	}
@@ -98,7 +83,7 @@ public class MazeCreator {
 	}
 
 	private void log() {
-		Gdx.app.log("MazeCreator", "\n" + this.toString());
+		Gdx.app.log("MazeCreator", "\n" + maze.toString());
 	}
 
 	/*
@@ -121,7 +106,7 @@ public class MazeCreator {
 
 		Place exit = createExit();
 
-		maze[exit.row][exit.col] = PLACE.empty;
+		maze.setPlace(exit.row, exit.col, Maze.PLACE.empty);
 
 		Place nextRoom =
 			new Place(
@@ -139,7 +124,7 @@ public class MazeCreator {
 	 */
 	private void createRoom(Place room) {
 		// "Mark the current cell as visited"
-		maze[room.row][room.col] = PLACE.visited;
+		maze.setPlace(room.row, room.col, Maze.PLACE.visited);
 
 		// "and get a list of its neighbors"
 		// it may be a bit faster if I get only the
@@ -167,8 +152,10 @@ public class MazeCreator {
 			// places
 			if (!isVisitedOrOutOfWorld(nextRoom)) {
 				// "remove the wall between this cell and that neighbor"
-				maze[(room.row + nextRoom.row) / 2][(room.col + nextRoom.col) / 2] =
-					PLACE.empty;
+				maze.setPlace(
+					(room.row + nextRoom.row) / 2,
+					(room.col + nextRoom.col) / 2,
+					Maze.PLACE.empty);
 
 				// "and then recur with that neighbor as the current cell"
 				createRoom(nextRoom);
@@ -181,9 +168,8 @@ public class MazeCreator {
 		int col = place.col;
 
 		return
-			(row < 0 || row >= Const.WORLD_HEIGHT) ||
-			(col < 0 || col >= Const.WORLD_WIDTH) ||
-			maze[row][col] == PLACE.visited;
+			!Maze.isValidPlace(row, col) ||
+			(maze.getPlace(row, col) == Maze.PLACE.visited);
 	}
 
 	/**
