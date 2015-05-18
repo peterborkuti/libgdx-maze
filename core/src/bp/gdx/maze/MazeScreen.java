@@ -1,7 +1,5 @@
 package bp.gdx.maze;
 
-import hu.bp.gdx.game.BrickInput;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,8 +11,7 @@ public class MazeScreen implements Screen {
 	private OrthographicCamera camera;
 	private TiledMapRenderer mazeRenderer;
 
-	private MazeInput iProcessor;
-
+	private CameraInputAdapter camInput;
 
 	public MazeScreen() {
 		super();
@@ -22,6 +19,8 @@ public class MazeScreen implements Screen {
 		MazeCreator mazeCreator = new MazeCreator();
 		mazeRenderer = mazeCreator.getMazeRenderer();
 		_setupCamera();
+		camInput = new CameraInputAdapter(camera);
+		Gdx.input.setInputProcessor(camInput);
 	}
 
 	private void _setupCamera() {
@@ -76,23 +75,5 @@ public class MazeScreen implements Screen {
 
 	}
 
-	private void _handleInput() {
-		if (iProcessor.down) {
-			camera.translate(0, -3, 0);
-		}
-		if (iProcessor.up) {
-			camera.translate(0, 3, 0);
-		}
-		if (iProcessor.plus) {
-			camera.zoom += 0.02;
-		}
-		if (iProcessor.minus) {
-			camera.zoom -= 0.02;
-		}
-		if (MazeInput.space && !bomb.isAlive()) {
-			MazeInput.space = false;
-			bomb.reset(nerd.getX(), nerd.getY());
-		}
-	}
 
 }
