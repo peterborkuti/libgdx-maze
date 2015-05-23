@@ -12,16 +12,16 @@ public class Const {
 	 */
 	public static final int SCREEN_SIZE = 21; // measured in tiles, n x n
 	/**
-	 * World height in tiles, should be odd (2*n + 1)
+	 * Maze height, unitless, should be odd (2*n + 1)
 	 */
-	public static final int WORLD_HEIGHT = 21;
+	public static final int MAZE_HEIGHT = 21;
 	/**
-	 * World width in tiles, should be odd (2*n + 1)
+	 * Maze width, unitless, should be odd (2*n + 1)
 	 */
-	public static final int WORLD_WIDTH = 21;
+	public static final int MAZE_WIDTH = 21;
 	/**
-	 * Wordl width in unit
+	 * 1 room in the maze will be nXn in tiles
+	 * but walls and doors remain 1 tile
 	 */
-	public static final int WORLD_WIDTH_UNIT = WORLD_WIDTH * TILE_SIZE;
-
+	public static final int MAZE_MAGNIFY_TO_WORDL = 8;
 }

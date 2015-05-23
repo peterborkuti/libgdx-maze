@@ -48,8 +48,8 @@ public class MazeCreator {
 		***********
 	*/
 	private void fillWithWalls() {
-		for (int r = 0; r < Const.WORLD_HEIGHT; r++) {
-			for (int c = 0; c < Const.WORLD_WIDTH; c++) {
+		for (int r = 0; r < Const.MAZE_HEIGHT; r++) {
+			for (int c = 0; c < Const.MAZE_WIDTH; c++) {
 				maze.setPlace(r, c, Maze.PLACE.wall);
 			}
 		}
@@ -69,8 +69,8 @@ public class MazeCreator {
 		***********
 	 */
 	private void createDefaultRooms() {
-		for (int r = 1; r < Const.WORLD_HEIGHT; r += 2) {
-			for (int c = 1; c < Const.WORLD_WIDTH; c += 2) {
+		for (int r = 1; r < Const.MAZE_HEIGHT; r += 2) {
+			for (int c = 1; c < Const.MAZE_WIDTH; c += 2) {
 				maze.setPlace(r, c, Maze.PLACE.empty);
 			}
 		}
@@ -81,9 +81,9 @@ public class MazeCreator {
 	 */
 	private Place createExit() {
 		// exit should be on the left or right side
-		int c = (Math.random() < 0.5) ? 0 : Const.WORLD_WIDTH - 1;
+		int c = (Math.random() < 0.5) ? 0 : Const.MAZE_WIDTH - 1;
 		// exit should be on odd numbers
-		int r = MathUtils.random(Const.WORLD_HEIGHT / 2) * 2 + 1;
+		int r = MathUtils.random(Const.MAZE_HEIGHT / 2) * 2 + 1;
 		return new Place(r, c);
 	}
 

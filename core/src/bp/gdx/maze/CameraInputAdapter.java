@@ -1,10 +1,8 @@
 package bp.gdx.maze;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class CameraInputAdapter extends InputAdapter {
@@ -56,9 +54,6 @@ public class CameraInputAdapter extends InputAdapter {
 			retVal = keys.get(keycode);
 		}
 
-		if (retVal) {
-			Gdx.app.log("CameraInputAdapter", "isKeyPressed:" + keycode);
-		}
 		return retVal;
 	}
 
