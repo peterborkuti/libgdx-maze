@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class MazeCreator {
 
-	private Maze maze = new Maze("brick_wall_single_perfect.png");
+	private Maze maze;
 
 	class Place {
 		int row;
@@ -26,6 +26,9 @@ public class MazeCreator {
 	}
 
 	public MazeCreator() {
+		maze = 
+			new Maze("brick_wall_single_perfect.png", new MazeStringRenderer());
+
 		createMaze();
 		log();
 	}

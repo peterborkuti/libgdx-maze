@@ -8,12 +8,14 @@ public class Maze {
 	public enum PLACE {wall, empty, visited};
 
 	private PLACE maze[][] = new PLACE[Const.MAZE_HEIGHT][Const.MAZE_WIDTH];
-	private MazeStringRenderer stringRenderer;
+
+	private StringRenderer stringRenderer;
 	private MazeTileRenderer tileRenderer; 
 
-	public Maze(String wallFile) {
+	public Maze(String wallFile, StringRenderer stringRenderer) {
 		super();
-		stringRenderer = new MazeStringRenderer(maze);
+		this.stringRenderer = stringRenderer;
+		stringRenderer.setMap(maze);
 		tileRenderer = new MazeTileRenderer(maze, wallFile);
 	}
 

@@ -2,15 +2,9 @@ package bp.gdx.maze;
 
 import bp.gdx.maze.Maze.PLACE;
 
-public class MazeStringRenderer {
-	public static final char WALL = 'H';
-	public static final char NOTWALL = ' ';
+public class MazeStringRenderer implements StringRenderer {
 
 	private PLACE maze[][];
-
-	public MazeStringRenderer(PLACE maze[][]) {
-		this.maze = maze;
-	}
 
 	public String toString() {
 		char carr[] = new char[(Const.MAZE_WIDTH + 1) * Const.MAZE_HEIGHT];
@@ -24,6 +18,11 @@ public class MazeStringRenderer {
 		}
 
 		return new String(carr);
+	}
+
+	@Override
+	public void setMap(PLACE[][] map) {
+		this.maze = map;
 	}
 
 }
