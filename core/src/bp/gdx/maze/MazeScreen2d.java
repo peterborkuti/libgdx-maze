@@ -1,6 +1,7 @@
 package bp.gdx.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,14 +25,22 @@ public class MazeScreen2d implements Screen {
 
 		camInput = new CameraInputAdapter();
 		Actor cameraActor = new CameraActor(camInput);
-		stage = new Stage(new ScreenViewport());
-		Gdx.input.setInputProcessor(stage);
+		ScreenViewport svp = new ScreenViewport();
+		svp.update(Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL,
+				Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL, true);
+		stage = new Stage(svp);
 		stage.addActor(cameraActor);
 
 	}
 
 	@Override
 	public void show() {
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(camInput);
+		//Stage's InputAdapters was not called with keyboard events.
+		//I think, it is logical, because keyboard events are global
+		multiplexer.addProcessor(stage);
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 
 	@Override

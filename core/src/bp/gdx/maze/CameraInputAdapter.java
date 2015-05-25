@@ -1,17 +1,16 @@
 package bp.gdx.maze;
 
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class CameraInputAdapter extends InputListener implements CameraAdapter {
-	private float rotationSpeed = 0.5f;
+public class CameraInputAdapter extends InputAdapter implements CameraAdapter {
+
+	private STATUS status = STATUS.NONE;
 
 	private ObjectMap<Integer, Boolean> keys = new ObjectMap<Integer, Boolean>();
-
-	private OrthographicCamera camera;
 
 	public CameraInputAdapter() {
 		super();
@@ -27,26 +26,25 @@ public class CameraInputAdapter extends InputListener implements CameraAdapter {
 	}
 
 	@Override
-	public void setCamera(OrthographicCamera camera) {
-		this.camera = camera;
-	}
-
-	@Override
-	public boolean keyDown(InputEvent event, int keycode) {
+	public boolean keyDown(int keycode) {
+		Gdx.app.log("CameraInputAdapter", "keydown" + keycode);
 		if (keys.containsKey(keycode)) {
 			keys.put(keycode, true);
+			return true;
 		}
 
-		return super.keyDown(event, keycode);
+		return false;
 	}
 
 	@Override
-	public boolean keyUp(InputEvent event, int keycode) {
+	public boolean keyUp(int keycode) {
+		Gdx.app.log("CameraInputAdapter", "keyup" + keycode);
 		if (keys.containsKey(keycode)) {
 			keys.put(keycode, false);
+			return true;
 		}
 
-		return super.keyUp(event, keycode);
+		return false;
 	}
 
 	private boolean isKeyPressed(int keycode) {
@@ -59,34 +57,29 @@ public class CameraInputAdapter extends InputListener implements CameraAdapter {
 		return retVal;
 	}
 
-	@Override
-	public void updateCamera() {
-		if (isKeyPressed(Keys.A)) {
-			camera.zoom += 0.02;
-		}
-		if (isKeyPressed(Keys.Q)) {
-			camera.zoom -= 0.02;
-		}
+	private void update() {
+
 		if (isKeyPressed(Keys.LEFT)) {
-			camera.translate(-3, 0, 0);
+			status = STATUS.LEFT;
 		}
-		if (isKeyPressed(Keys.RIGHT)) {
-			camera.translate(3, 0, 0);
+		else if (isKeyPressed(Keys.RIGHT)) {
+			status = STATUS.RIGHT;
 		}
-		if (isKeyPressed(Keys.DOWN)) {
-			camera.translate(0, -3, 0);
+		else if (isKeyPressed(Keys.DOWN)) {
+			status = STATUS.DOWN;
 		}
-		if (isKeyPressed(Keys.UP)) {
-			camera.translate(0, 3, 0);
+		else if (isKeyPressed(Keys.UP)) {
+			status = STATUS.UP;
 		}
-		if (isKeyPressed(Keys.W)) {
-			camera.rotate(-rotationSpeed, 0, 0, 1);
+		else {
+			status = STATUS.NONE;
 		}
-		if (isKeyPressed(Keys.E)) {
-			camera.rotate(rotationSpeed, 0, 0, 1);
-		}
-
-		camera.update();
-
 	}
+
+	@Override
+	public STATUS getStatus() {
+		update();
+		return status;
+	}
+
 }
