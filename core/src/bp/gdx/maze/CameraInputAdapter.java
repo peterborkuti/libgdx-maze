@@ -1,11 +1,12 @@
 package bp.gdx.maze;
 
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class CameraInputAdapter extends InputAdapter {
+public class CameraInputAdapter extends InputListener implements CameraAdapter {
 	private float rotationSpeed = 0.5f;
 
 	private ObjectMap<Integer, Boolean> keys = new ObjectMap<Integer, Boolean>();
@@ -25,26 +26,27 @@ public class CameraInputAdapter extends InputAdapter {
 		keys.put(Keys.E, false);
 	}
 
+	@Override
 	public void setCamera(OrthographicCamera camera) {
 		this.camera = camera;
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
+	public boolean keyDown(InputEvent event, int keycode) {
 		if (keys.containsKey(keycode)) {
 			keys.put(keycode, true);
 		}
 
-		return super.keyDown(keycode);
+		return super.keyDown(event, keycode);
 	}
 
 	@Override
-	public boolean keyUp(int keycode) {
+	public boolean keyUp(InputEvent event, int keycode) {
 		if (keys.containsKey(keycode)) {
 			keys.put(keycode, false);
 		}
 
-		return super.keyUp(keycode);
+		return super.keyUp(event, keycode);
 	}
 
 	private boolean isKeyPressed(int keycode) {
@@ -57,6 +59,7 @@ public class CameraInputAdapter extends InputAdapter {
 		return retVal;
 	}
 
+	@Override
 	public void updateCamera() {
 		if (isKeyPressed(Keys.A)) {
 			camera.zoom += 0.02;

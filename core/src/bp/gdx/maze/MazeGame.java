@@ -6,7 +6,7 @@ public class MazeGame extends Game {
 
 	@Override
 	public void create () {
-		this.setScreen(new MazeScreen());
+		this.setScreen(new MazeScreen2d());
 	}
 
 	@Override
