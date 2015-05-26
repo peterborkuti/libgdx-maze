@@ -14,14 +14,14 @@ public class Const {
 	/**
 	 * Maze height, unitless, should be odd (2*n + 1)
 	 */
-	public static final int MAZE_HEIGHT = 21;
+	public static final int MAZE_HEIGHT = 11;
 	/**
 	 * Maze width, unitless, should be odd (2*n + 1)
 	 */
-	public static final int MAZE_WIDTH = 21;
+	public static final int MAZE_WIDTH = 11;
 	/**
 	 * 1 room in the maze will be nXn in tiles
 	 * but walls and doors remain 1 tile
 	 */
-	public static final int MAZE_MAGNIFY_TO_WORDL = 8;
+	public static final int MAZE_MAGNIFY_TO_WORDL = 16;
 }
