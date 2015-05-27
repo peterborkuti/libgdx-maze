@@ -24,4 +24,8 @@ public class Const {
 	 * but walls and doors remain 1 tile
 	 */
 	public static final int MAZE_MAGNIFY_TO_WORDL = 16;
+
+	public static final int ROOM_OUTER_HEIGHT = Const.TILE_SIZE * (Const.MAZE_MAGNIFY_TO_WORDL + 1);
+
+	public static final int ROOM_OUTER_WIDTH = Const.TILE_SIZE * (Const.MAZE_MAGNIFY_TO_WORDL + 1);
 }

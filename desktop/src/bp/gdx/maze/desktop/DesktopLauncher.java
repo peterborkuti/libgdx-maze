@@ -9,8 +9,8 @@ import bp.gdx.maze.MazeGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = Const.TILE_SIZE * (Const.MAZE_MAGNIFY_TO_WORDL + 1);
-		config.height = Const.TILE_SIZE * (Const.MAZE_MAGNIFY_TO_WORDL + 1);
+		config.width = Const.ROOM_OUTER_WIDTH;
+		config.height = Const.ROOM_OUTER_HEIGHT;
 		new LwjglApplication(new MazeGame(), config);
 	}
 }
