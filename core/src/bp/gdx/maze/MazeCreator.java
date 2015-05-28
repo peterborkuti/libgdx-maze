@@ -9,22 +9,6 @@ public class MazeCreator {
 
 	private Maze maze;
 
-	class Place {
-		int row;
-		int col;
-
-		public Place(int row, int col) {
-			super();
-			this.row = row;
-			this.col = col;
-		}
-
-		@Override
-		public String toString() {
-			return "Place [row=" + row + ", col=" + col + "]";
-		}
-	}
-
 	public MazeCreator() {
 		maze = 
 			new Maze("brick_wall_single_perfect.png", new MazeStringRenderer());

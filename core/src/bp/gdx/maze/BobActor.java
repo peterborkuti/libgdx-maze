@@ -11,7 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 
 public class BobActor extends Actor {
+	public BobActor(CameraAdapter cameraInputAdapter) {
+		super();
+		this.camAdapter = cameraInputAdapter;
+	}
+
+	final static int delay = 1;
 	private boolean moving = false;
+	CameraAdapter camAdapter;
+	float z = 0;
 
 	class StopMoving extends RunnableAction {
 		public void run() {
@@ -25,11 +33,6 @@ public class BobActor extends Actor {
 		super.act(delta);
 
 		if (moving) {
-			Camera cam = this.getStage().getCamera();
-			Vector3 vec = new Vector3(getX(), getY(), z);
-			cam.position.set(vec);
-			Gdx.app.log("CameraActor", "act:" + vec);
-			cam.update();
 			return;
 		}
 
@@ -39,13 +42,16 @@ public class BobActor extends Actor {
 			return;
 		}
 
-		moving = true;
-
 		StopMoving stopAction = new StopMoving();
 
 		MoveByAction action = null;
 
-		float d = Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL;
+		float x = getX();
+		float y = getY();
+
+		float roomX = x / 
+
+		float d = Const.TILE_SIZE;
 
 		if (state == CameraAdapter.STATUS.DOWN) {
 			action = Actions.moveBy(0f, -d, delay);
