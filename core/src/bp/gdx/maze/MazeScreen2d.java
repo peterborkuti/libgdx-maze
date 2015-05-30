@@ -24,13 +24,16 @@ public class MazeScreen2d implements Screen {
 		mazeRenderer = mazeCreator.getMazeRenderer();
 
 		camInput = new CameraInputAdapter();
-		Actor cameraActor = new CameraActor(camInput);
+		//Actor cameraActor = new CameraActor(camInput);
+		Actor bobActor = new BobActor(camInput);
 		ScreenViewport svp = new ScreenViewport();
 		svp.update(Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL,
 				Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL, true);
 		stage = new Stage(svp);
-		stage.addActor(cameraActor);
-
+		//stage.addActor(cameraActor);
+		Gdx.app.log("MazeScreen2d","bob is adding to stage");
+		stage.addActor(bobActor);
+		Gdx.app.log("MazeScreen2d","bob adding done");
 	}
 
 	@Override
@@ -48,6 +51,7 @@ public class MazeScreen2d implements Screen {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		Gdx.app.log("MazeScreen2d","render");
 		stage.act(delta);
 		stage.draw();
 
