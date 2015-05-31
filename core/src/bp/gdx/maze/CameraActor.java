@@ -16,7 +16,7 @@ public class CameraActor extends Actor {
 	BobActor bobActor = null;
 	TiledMap map = null;
 	float z = 0;
-	final static int delay = 5; // seconds
+	final static int delay = 1; // seconds
 	private static final float HYSTERESIS = 10;
 
 	private boolean moving = false;
