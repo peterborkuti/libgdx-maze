@@ -31,14 +31,13 @@ public class BobActor extends Actor {
 		this.setVisible(true);
 		Vector2 pos =
 			MazeUtil.getTileCoordinate(
-				Const.ROOM_OUTER_WIDTH / 2, Const.ROOM_OUTER_HEIGHT / 2);
+				Const.ROOM_OUTER_WIDTH / 2.0f, Const.ROOM_OUTER_HEIGHT / 2.0f);
 		this.setPosition(pos.x, pos.y);
 	}
 
-	final static float delay = 0.2f;
+	private final static float delay = 0.1f;
 	private boolean moving = false;
-	CameraAdapter camAdapter;
-	float z = 0;
+	private CameraAdapter camAdapter;
 
 	class StopMoving extends RunnableAction {
 		public void run() {
@@ -57,40 +56,25 @@ public class BobActor extends Actor {
 
 		Direction state = camAdapter.getStatus();
 
-		if (state == Direction.NONE) {
+		Place place = MazeUtil.getTilePlace(getX(), getY());
+
+		Place newPlace = MazeUtil.stepToDirection(tiledMap, state, place);
+
+		if (newPlace == null) {
 			return;
 		}
 
-		Rectangle bobBoundary = new Rectangle(getX(), getY(), getWidth(),
-				getHeight());
+		direction = state;
 
-		float d = Const.TILE_SIZE;
+		moving = true;
 
-		if (state == Direction.DOWN) {
-			bobBoundary.setPosition(getX(), getY() - d);
-		}
-		if (state == Direction.UP) {
-			bobBoundary.setPosition(getX(), getY() + d);
-		}
-		if (state == Direction.LEFT) {
-			bobBoundary.setPosition(getX() - d, getY());
-		}
-		if (state == Direction.RIGHT) {
-			bobBoundary.setPosition(getX() + d, getY());
-		}
+		StopMoving stopAction = new StopMoving();
 
-		if (MazeUtil.isEmptyCell(tiledMap, bobBoundary.x, bobBoundary.y)) {
-			direction = state;
+		Vector2 v = MazeUtil.getTileCoordinate(newPlace.row, newPlace.col);
 
-			moving = true;
+		MoveToAction action = Actions.moveTo(v.x, v.y, delay);
 
-			StopMoving stopAction = new StopMoving();
-
-			MoveToAction action = Actions.moveTo(bobBoundary.x, bobBoundary.y,
-					delay);
-
-			this.addAction(Actions.sequence(action, stopAction));
-		}
+		this.addAction(Actions.sequence(action, stopAction));
 	}
 
 	private ShapeRenderer renderer = new ShapeRenderer();

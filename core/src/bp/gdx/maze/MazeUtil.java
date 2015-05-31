@@ -70,8 +70,8 @@ public class MazeUtil {
 	}
 
 	public static Vector2 getTileCoordinate(int row, int col) {
-		Vector2 v = new Vector2(col * Const.TILE_SIZE, row
-				* Const.TILE_SIZE);
+		Vector2 v =
+			new Vector2(col * Const.TILE_SIZE, row * Const.TILE_SIZE);
 
 		return v;
 	}
@@ -129,7 +129,38 @@ public class MazeUtil {
 				(int)(row + Const.MAZE_MAGNIFY_TO_WORDL / 2) ,
 				(int)(col + Const.MAZE_MAGNIFY_TO_WORDL / 2));
 
+		//Camera should be in the center, not at the bottom-left corner of
+		//the center tile
+		v.add(Const.TILE_SIZE /2, Const.TILE_SIZE / 2);
 		return v;
+	}
+
+	public static Place stepToDirection(TiledMap map, Direction direction, Place place) {
+
+		if (direction == Direction.NONE) {
+			return null;
+		}
+
+		Place goal = new Place(place.row, place.col);
+
+		if (direction == Direction.DOWN) {
+			goal.row -= 1;
+		}
+		if (direction == Direction.UP) {
+			goal.row += 1;
+		}
+		if (direction == Direction.LEFT) {
+			goal.col -= 1;
+		}
+		if (direction == Direction.RIGHT) {
+			goal.col += 1;
+		}
+
+		if (!MazeUtil.isEmptyCell(map, goal)) {
+			return null;
+		}
+
+		return goal;
 	}
 
 }

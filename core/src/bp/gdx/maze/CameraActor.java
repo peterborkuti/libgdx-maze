@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 
 public class CameraActor extends Actor {
@@ -15,7 +16,7 @@ public class CameraActor extends Actor {
 	BobActor bobActor = null;
 	TiledMap map = null;
 	float z = 0;
-	final static int delay = 1; // seconds
+	final static int delay = 5; // seconds
 	private static final float HYSTERESIS = 10;
 
 	private boolean moving = false;
@@ -51,37 +52,25 @@ public class CameraActor extends Actor {
 
 		// bob is in a door and it's direction show where it wants to go to
 
-		Place goal = new Place(bobPlace.row, bobPlace.col);
+		Place newPlace = MazeUtil.stepToDirection(map, bobDirection, bobPlace);
 
-		if (bobDirection == Direction.DOWN) {
-			goal.row -= 1;
-		}
-		if (bobDirection == Direction.UP) {
-			goal.row += 1;
-		}
-		if (bobDirection == Direction.LEFT) {
-			goal.col -= 1;
-		}
-		if (bobDirection == Direction.RIGHT) {
-			goal.col += 1;
-		}
-
-		if (!MazeUtil.isEmptyCell(map, goal)) {
+		if (newPlace == null) {
 			return;
 		}
 
-		Vector2 roomCenter = MazeUtil.getRoomCameraPosition(goal);
+		Vector2 roomCenter = MazeUtil.getRoomCameraPosition(newPlace);
 
 		if ((Math.abs(roomCenter.x - getX()) > HYSTERESIS) ||
 			(Math.abs(roomCenter.y - getY()) > HYSTERESIS)) {
 
 			StopMoving stopAction = new StopMoving();
 
+			MoveToAction action =
+				Actions.moveTo(roomCenter.x, roomCenter.y, delay);
+
 			moving = true;
 
-			this.addAction(
-				Actions.sequence(
-					Actions.moveTo(roomCenter.x, roomCenter.y), stopAction));
+			this.addAction(Actions.sequence(action, stopAction));
 		}
 	}
 
