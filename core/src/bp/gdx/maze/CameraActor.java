@@ -2,18 +2,21 @@ package bp.gdx.maze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 
 public class CameraActor extends Actor {
 
-	CameraAdapter camAdapter;
+	BobActor bobActor = null;
+	TiledMap map = null;
 	float z = 0;
 	final static int delay = 1; // seconds
+	private static final float HYSTERESIS = 10;
 
 	private boolean moving = false;
 
@@ -37,38 +40,54 @@ public class CameraActor extends Actor {
 			return;
 		}
 
-		CameraAdapter.STATUS state = camAdapter.getStatus();
+		Place bobPlace = MazeUtil.getTilePlace(bobActor.getX(), bobActor.getY());
 
-		if (state == CameraAdapter.STATUS.NONE) {
+		Direction bobDirection = bobActor.getDirection();
+
+		if (bobDirection == Direction.NONE ||
+			!MazeUtil.isDoor(map, bobPlace)) {
 			return;
 		}
 
-		moving = true;
+		// bob is in a door and it's direction show where it wants to go to
 
-		StopMoving stopAction = new StopMoving();
+		Place goal = new Place(bobPlace.row, bobPlace.col);
 
-		MoveByAction action = null;
-
-		float d = Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL;
-
-		if (state == CameraAdapter.STATUS.DOWN) {
-			action = Actions.moveBy(0f, -d, delay);
+		if (bobDirection == Direction.DOWN) {
+			goal.row -= 1;
 		}
-		if (state == CameraAdapter.STATUS.UP) {
-			action = Actions.moveBy(0f, d, delay);
+		if (bobDirection == Direction.UP) {
+			goal.row += 1;
 		}
-		if (state == CameraAdapter.STATUS.LEFT) {
-			action = Actions.moveBy(-d, 0f, delay);
+		if (bobDirection == Direction.LEFT) {
+			goal.col -= 1;
 		}
-		if (state == CameraAdapter.STATUS.RIGHT) {
-			action = Actions.moveBy(d, 0f, delay);
+		if (bobDirection == Direction.RIGHT) {
+			goal.col += 1;
 		}
 
-		this.addAction(Actions.sequence(action, stopAction));
+		if (!MazeUtil.isEmptyCell(map, goal)) {
+			return;
+		}
+
+		Vector2 roomCenter = MazeUtil.getRoomCameraPosition(goal);
+
+		if ((Math.abs(roomCenter.x - getX()) > HYSTERESIS) ||
+			(Math.abs(roomCenter.y - getY()) > HYSTERESIS)) {
+
+			StopMoving stopAction = new StopMoving();
+
+			moving = true;
+
+			this.addAction(
+				Actions.sequence(
+					Actions.moveTo(roomCenter.x, roomCenter.y), stopAction));
+		}
 	}
 
-	public CameraActor(CameraAdapter cameraInputAdapter) {
-		camAdapter = cameraInputAdapter;
+	public CameraActor(TiledMap map, BobActor bobActor) {
+		this.bobActor = bobActor;
+		this.map = map;
 	}
 
 	@Override

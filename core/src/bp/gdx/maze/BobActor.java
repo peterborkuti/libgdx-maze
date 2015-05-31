@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,14 +15,22 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 
 public class BobActor extends Actor {
-	public BobActor(CameraAdapter cameraInputAdapter) {
+	private TiledMap tiledMap;
+	private Direction direction = Direction.NONE;
+
+	public Direction getDirection() {
+		return direction;
+	}
+
+	public BobActor(CameraAdapter cameraInputAdapter, TiledMap tiledMap) {
 		super();
 		this.camAdapter = cameraInputAdapter;
+		this.tiledMap = tiledMap;
 		this.setWidth(Const.TILE_SIZE);
 		this.setHeight(Const.TILE_SIZE);
 		this.setVisible(true);
 		Vector2 pos =
-			MazeUtil.getNearestTilePosition(
+			MazeUtil.getTileCoordinate(
 				Const.ROOM_OUTER_WIDTH / 2, Const.ROOM_OUTER_HEIGHT / 2);
 		this.setPosition(pos.x, pos.y);
 	}
@@ -40,43 +50,38 @@ public class BobActor extends Actor {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		Gdx.app.log("BobActor", "act: start");
 
 		if (moving) {
-			Gdx.app.log("BobActor", "act: bob is moving, quit");
 			return;
 		}
 
-		CameraAdapter.STATUS state = camAdapter.getStatus();
+		Direction state = camAdapter.getStatus();
 
-		if (state == CameraAdapter.STATUS.NONE) {
-			Gdx.app.log("BobActor", "act: no input, quit");
+		if (state == Direction.NONE) {
 			return;
 		}
 
 		Rectangle bobBoundary = new Rectangle(getX(), getY(), getWidth(),
 				getHeight());
 
-		Rectangle roomInnerBoundary = MazeUtil.getRoomInnerBoundary(getX(),
-				getY());
-
 		float d = Const.TILE_SIZE;
 
-		if (state == CameraAdapter.STATUS.DOWN) {
+		if (state == Direction.DOWN) {
 			bobBoundary.setPosition(getX(), getY() - d);
 		}
-		if (state == CameraAdapter.STATUS.UP) {
+		if (state == Direction.UP) {
 			bobBoundary.setPosition(getX(), getY() + d);
 		}
-		if (state == CameraAdapter.STATUS.LEFT) {
+		if (state == Direction.LEFT) {
 			bobBoundary.setPosition(getX() - d, getY());
 		}
-		if (state == CameraAdapter.STATUS.RIGHT) {
+		if (state == Direction.RIGHT) {
 			bobBoundary.setPosition(getX() + d, getY());
 		}
 
-		if (roomInnerBoundary.contains(bobBoundary)) {
-			Gdx.app.log("BobActor", "act: set moving");
+		if (MazeUtil.isEmptyCell(tiledMap, bobBoundary.x, bobBoundary.y)) {
+			direction = state;
+
 			moving = true;
 
 			StopMoving stopAction = new StopMoving();
@@ -86,9 +91,6 @@ public class BobActor extends Actor {
 
 			this.addAction(Actions.sequence(action, stopAction));
 		}
-		else {
-			Gdx.app.log("BobActor", "act: out of bound, quit");
-		}
 	}
 
 	private ShapeRenderer renderer = new ShapeRenderer();
@@ -96,7 +98,9 @@ public class BobActor extends Actor {
 	public void draw(Batch batch, float parentAlpha) {
 		batch.end();
 
-		Gdx.app.log("BobActor", "draw:"  + getX() + "," + getY() + "," + getWidth() + "," + getHeight());
+		if (this.moving) {
+			Gdx.app.log("BobActor", "draw:"  + getX() + "," + getY() + "," + getWidth() + "," + getHeight());
+		}
 
 		renderer.setProjectionMatrix(batch.getProjectionMatrix());
 		renderer.setTransformMatrix(batch.getTransformMatrix());

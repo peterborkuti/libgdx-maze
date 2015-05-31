@@ -23,6 +23,10 @@ public class MazeTileRenderer {
 		this.maze = maze;
 	}
 
+	public TiledMap getMap() {
+		return map;
+	}
+
 	private void fillWithWalls(TiledMapTileLayer layer) {
 		for (int r = 0; r < layer.getHeight(); r++) {
 			for (int c = 0; c < layer.getWidth(); c++) {

@@ -1,6 +1,7 @@
 package bp.gdx.maze;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -187,6 +188,10 @@ public class MazeCreator {
 		}
 
 		return notVisited;
+	}
+
+	public TiledMap getTiledMap() {
+		return maze.getTiledMap();
 	}
 
 

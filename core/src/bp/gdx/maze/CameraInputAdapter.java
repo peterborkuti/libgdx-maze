@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class CameraInputAdapter extends InputAdapter implements CameraAdapter {
 
-	private STATUS status = STATUS.NONE;
+	private Direction status = Direction.NONE;
 
 	private ObjectMap<Integer, Boolean> keys = new ObjectMap<Integer, Boolean>();
 
@@ -60,24 +60,24 @@ public class CameraInputAdapter extends InputAdapter implements CameraAdapter {
 	private void update() {
 
 		if (isKeyPressed(Keys.LEFT)) {
-			status = STATUS.LEFT;
+			status = Direction.LEFT;
 		}
 		else if (isKeyPressed(Keys.RIGHT)) {
-			status = STATUS.RIGHT;
+			status = Direction.RIGHT;
 		}
 		else if (isKeyPressed(Keys.DOWN)) {
-			status = STATUS.DOWN;
+			status = Direction.DOWN;
 		}
 		else if (isKeyPressed(Keys.UP)) {
-			status = STATUS.UP;
+			status = Direction.UP;
 		}
 		else {
-			status = STATUS.NONE;
+			status = Direction.NONE;
 		}
 	}
 
 	@Override
-	public STATUS getStatus() {
+	public Direction getStatus() {
 		update();
 		return status;
 	}

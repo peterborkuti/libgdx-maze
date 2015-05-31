@@ -1,5 +1,6 @@
 package bp.gdx.maze;
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 
 
@@ -47,5 +48,9 @@ public class Maze {
 
 	public TiledMapRenderer getRenderer() {
 		return tileRenderer.getRenderer();
+	}
+
+	public TiledMap getTiledMap() {
+		return tileRenderer.getMap();
 	}
 }
