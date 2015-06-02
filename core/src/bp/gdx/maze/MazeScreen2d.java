@@ -1,11 +1,15 @@
 package bp.gdx.maze;
 
+import bp.gdx.maze.actors.Bouncer;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -35,7 +39,17 @@ public class MazeScreen2d implements Screen {
 		Gdx.app.log("MazeScreen2d","bob is adding to stage");
 		stage.addActor(bobActor);
 		Gdx.app.log("MazeScreen2d","bob adding done");
+		Actor bouncers[] = new Actor[7];
+		for (int i = 0; i < bouncers.length; i++) {
+			bouncers[i] = new Bouncer(32, 32, getRandomColor(Color.BLACK), (float)(Math.random() * 0.6) + 0.1f, mazeCreator.getTiledMap());
+			stage.addActor(bouncers[i]);
+		}
 	}
+
+		private Color getRandomColor(Color notColor) {
+			Color colors[] = {Color.BLACK, Color.BLUE, Color.CYAN, Color.GRAY, Color.GREEN, Color.MAGENTA};
+			return colors[MathUtils.random(colors.length - 1)];
+		}
 
 	@Override
 	public void show() {
