@@ -1,7 +1,5 @@
 package bp.gdx.maze;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 
 
 public class Maze {
@@ -10,18 +8,8 @@ public class Maze {
 
 	private PLACE maze[][] = new PLACE[Const.MAZE_HEIGHT][Const.MAZE_WIDTH];
 
-	private StringRenderer stringRenderer;
-	private MazeTileRenderer tileRenderer; 
-
-	public Maze(String wallFile, StringRenderer stringRenderer) {
-		super();
-		this.stringRenderer = stringRenderer;
-		stringRenderer.setMap(maze);
-		tileRenderer = new MazeTileRenderer(maze, wallFile);
-	}
-
 	public String toString() {
-		return stringRenderer.toString();
+		return new MazeStringRenderer(this).toString();
 	}
 
 	public static boolean isValidPlace(int row, int col) {
@@ -46,11 +34,4 @@ public class Maze {
 		return place;
 	}
 
-	public TiledMapRenderer getRenderer() {
-		return tileRenderer.getRenderer();
-	}
-
-	public TiledMap getTiledMap() {
-		return tileRenderer.getMap();
-	}
 }

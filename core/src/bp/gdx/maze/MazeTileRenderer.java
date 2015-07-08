@@ -12,12 +12,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
 public class MazeTileRenderer {
-	private TiledMap map;
-	private TiledMapRenderer renderer;
-	private StaticTiledMapTile wallTile = null;
-	private PLACE maze[][];
+	protected TiledMap map;
+	protected TiledMapRenderer renderer;
+	protected StaticTiledMapTile wallTile = null;
+	protected final Maze maze;
+	protected int mazeMagnifyToWorld = Const.MAZE_MAGNIFY_TO_WORDL;
 
-	public MazeTileRenderer(PLACE maze[][], String wallFile) {
+	public MazeTileRenderer(Maze maze, String wallFile) {
 		Texture wall = new Texture(wallFile);
 		wallTile = new StaticTiledMapTile(new TextureRegion(wall));
 		this.maze = maze;
@@ -43,8 +44,8 @@ public class MazeTileRenderer {
 		for (int r = 1; r < Const.MAZE_HEIGHT; r += 2) {
 			for (int c = 1; c < Const.MAZE_WIDTH; c += 2) {
 				createRoom(
-					c * Const.MAZE_MAGNIFY_TO_WORDL / 2,
-					r * Const.MAZE_MAGNIFY_TO_WORDL / 2, layer);
+					c * mazeMagnifyToWorld / 2,
+					r * mazeMagnifyToWorld / 2, layer);
 			}
 		}
 	}
@@ -52,7 +53,7 @@ public class MazeTileRenderer {
 	private void createRoom(int col, int row, TiledMapTileLayer layer) {
 		Cell cell = null;
 
-		int halfRoom = Const.MAZE_MAGNIFY_TO_WORDL / 2 - 1;
+		int halfRoom = mazeMagnifyToWorld / 2 - 1;
 
 		for (int r = row - halfRoom; r < row + halfRoom + 1; r++) {
 			for (int c = col - halfRoom; c < col + halfRoom + 1; c++) {
@@ -73,10 +74,10 @@ public class MazeTileRenderer {
 		//doors in rows
 		for (int r = 0; r < Const.MAZE_HEIGHT; r += 2) {
 			for (int c = 0; c < Const.MAZE_WIDTH; c += 1) {
-				if (maze[r][c] == PLACE.empty) {
+				if (maze.getPlace(r, c) == PLACE.empty) {
 					layer.setCell(
-						c * Const.MAZE_MAGNIFY_TO_WORDL / 2,
-						r * Const.MAZE_MAGNIFY_TO_WORDL / 2, cell);
+						c * mazeMagnifyToWorld / 2,
+						r * mazeMagnifyToWorld / 2, cell);
 				}
 			}
 		}
@@ -84,10 +85,10 @@ public class MazeTileRenderer {
 		//doors in columns
 		for (int r = 0; r < Const.MAZE_HEIGHT; r += 1) {
 			for (int c = 0; c < Const.MAZE_WIDTH; c += 2) {
-				if (maze[r][c] == PLACE.empty) {
+				if (maze.getPlace(r, c) == PLACE.empty) {
 					layer.setCell(
-						c * Const.MAZE_MAGNIFY_TO_WORDL / 2,
-						r * Const.MAZE_MAGNIFY_TO_WORDL / 2, cell);
+						c * mazeMagnifyToWorld / 2,
+						r * mazeMagnifyToWorld / 2, cell);
 				}
 			}
 		}
@@ -96,8 +97,8 @@ public class MazeTileRenderer {
 	public void createTiledMap() {
 		int numOfRoomsX = (Const.MAZE_WIDTH - 1) / 2;
 		int numOfRoomsY = (Const.MAZE_HEIGHT - 1) / 2;
-		int mapWidth = numOfRoomsX * Const.MAZE_MAGNIFY_TO_WORDL + 1;
-		int mapHeight = numOfRoomsY * Const.MAZE_MAGNIFY_TO_WORDL + 1;
+		int mapWidth = numOfRoomsX * mazeMagnifyToWorld + 1;
+		int mapHeight = numOfRoomsY * mazeMagnifyToWorld + 1;
 
 		TiledMapTileLayer layer =
 				new TiledMapTileLayer(
@@ -118,6 +119,10 @@ public class MazeTileRenderer {
 		}
 
 		return renderer;
+	}
+
+	public TiledMap getTiledMap() {
+		return map;
 	}
 
 }

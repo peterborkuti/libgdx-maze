@@ -1,8 +1,6 @@
 package bp.gdx.maze;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
@@ -12,16 +10,15 @@ public class MazeCreator {
 
 	public MazeCreator() {
 		maze = 
-			new Maze("brick_wall_single_perfect.png", new MazeStringRenderer());
+			new Maze();
 
 		createMaze();
 		log();
 	}
 
-	public TiledMapRenderer getMazeRenderer() {
-		return maze.getRenderer();
+	public Maze getMaze() {
+		return maze;
 	}
-
 	/*
 		***********
 		***********
@@ -189,10 +186,5 @@ public class MazeCreator {
 
 		return notVisited;
 	}
-
-	public TiledMap getTiledMap() {
-		return maze.getTiledMap();
-	}
-
 
 }
