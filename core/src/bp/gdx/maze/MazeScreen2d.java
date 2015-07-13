@@ -2,6 +2,7 @@ package bp.gdx.maze;
 
 import bp.gdx.maze.actors.Bouncer;
 import bp.gdx.maze.actors.Fly;
+import bp.gdx.maze.camera.MapViewport;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -25,7 +26,7 @@ public class MazeScreen2d implements Screen {
 
 	private CameraInputAdapter camInput;
 
-	private OrthographicCamera mapCamera;
+	private MapViewport mapViewport;
 
 	private TiledMapRenderer mapRenderer;
 
@@ -53,11 +54,8 @@ public class MazeScreen2d implements Screen {
 		svp.update(Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL,
 				Const.TILE_SIZE * Const.MAZE_MAGNIFY_TO_WORDL, true);
 
-		mapCamera = new OrthographicCamera(Const.TILE_SIZE * 2 * Const.MAZE_WIDTH,
-				Const.TILE_SIZE * 2 * Const.MAZE_HEIGHT);
-		mapCamera.zoom = 2.5f;
-		mapCamera.translate(200, 200, 0);
-		mapCamera.update();
+		mapViewport = new MapViewport(Const.TILE_SIZE * Const.MAZE_WIDTH,
+				Const.TILE_SIZE * Const.MAZE_HEIGHT);
 
 		stage = new Stage(svp);
 		stage.addActor(cameraActor);
@@ -94,7 +92,8 @@ public class MazeScreen2d implements Screen {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		stage.act(delta);	
+		stage.act(delta);
+		stage.getViewport().apply();
 		stage.draw();
 
 		OrthographicCamera cam = (OrthographicCamera) stage.getCamera();
@@ -102,14 +101,15 @@ public class MazeScreen2d implements Screen {
 		mazeRenderer.setView(cam);
 		mazeRenderer.render();
 
-		mapRenderer.setView(mapCamera);
+		mapViewport.apply();
+		mapRenderer.setView((OrthographicCamera)mapViewport.getCamera());
 		mapRenderer.render();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
-		
+		mapViewport.update(width, height, true);
 	}
 
 	@Override
